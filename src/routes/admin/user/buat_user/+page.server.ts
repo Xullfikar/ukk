@@ -1,21 +1,19 @@
-import { auth } from '$lib/server/lucia';
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { auth } from "$lib/server/lucia";
+import { fail, redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
     const session = await locals.validate()
-    if(session) {
+    if(!session) {
         throw redirect(302, "/")
     }
 };
 
 export const actions: Actions = {
     default: async ({ request }) => {
-        const { nama, username, password, telepon, nik } = Object.fromEntries(
+        const { nama, username, password, telepon, nik, level } = Object.fromEntries(
             await request.formData()
         ) as Record<string, string>;
-
-        const level = "MASYARAKAT";
 
         try {
             await auth.createUser({
@@ -36,6 +34,6 @@ export const actions: Actions = {
             console.log(error);
             return fail(400, {message: "Tidak dapat membuat User"})
         }
-        throw redirect(302, "/login")
+        throw redirect(302, "/admin/user")
     },
 };

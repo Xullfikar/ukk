@@ -13,18 +13,21 @@
       Row,
       Table,
       Modal,
-      Icon
+      Icon,
+      ModalFooter,
+      ModalHeader,
+      ModalBody
     } from "sveltestrap";
   
-    // import type { PageData } from "./$types";
-    // export let data: PageData;
-    // $: ({ pengaduans } = data);
+    import type { PageData } from "./$types";
+    export let data: PageData;
+    $: ({ users } = data);
   
     let searchStr: any;
     let open = false;
     let Idi: any;
   
-    function id(id: BigInt) {
+    function id(id: string) {
       open = !open;
       Idi = id;
     }
@@ -46,7 +49,7 @@
   <Card class="mt-3 mb-4">
     <CardHeader class="bg-secondary">
       <div class="d-flex justify-content-between align-items-center">
-        <b>Data Pengaduan</b>
+        <b>Data User</b>
         <div style="width: 200px;">
           <Input placeholder="Search" bind:value={searchStr} />
         </div>
@@ -56,53 +59,74 @@
       <Table bordered responsive hover>
         <thead>
           <tr>
-            <th>Judul</th>
-            <th>Tanggal</th>
-            <th>Status Verification</th>
+            <th class="text-center">NIK</th>
+            <th class="text-center">Nama</th>
+            <th class="text-center">Level</th>
           </tr>
         </thead>
         <tbody>
-          <!-- {#each pengaduans as pengaduan}
-            {#if pengaduan.judul.includes(searchStr)}
-              <tr on:click={() => id(pengaduan.id)}>
-                <td>{pengaduan.judul}</td>
-                <td>{pengaduan.tanggal}</td>
-                <td>{pengaduan.status}</td>
+          {#each users as user}
+            {#if user.nama.includes(searchStr)}
+              {#if user.level != "ADMIN"}
+              <tr on:click={() => id(user.id)}>
+                <td class="col-4">{user.nik}</td>
+                <td class="col-4">{user.nama}</td>
+                <td class="col-4">{user.level}</td>
               </tr>
-              {#if Idi == pengaduan.id}
+              {#if Idi == user.id}
                 <Modal
-                  body
-                  header={pengaduan.judul}
                   isOpen={open}
                   {toggle}
                   scrollable
                 >
-                  
-                  <img src={pengaduan.foto} width="100%" />
+                <ModalHeader {toggle}>
+                  <h5>{user.nama}</h5>
+                </ModalHeader>
+                <ModalBody>
                   <table class="mt-2">
                     <tr>
-                      <th>Isi Pengaduan:</th>
+                      <th>Username:</th>
                     </tr>
                     <tr>
-                      <td>{pengaduan.isi}</td>
+                      <td class="text-success">{user.username}</td>
                     </tr>
                     <tr>
-                      <th>Status Verification:</th>
+                      <th>NIK:</th>
                     </tr>
                     <tr>
-                      <td>{pengaduan.status}</td>
+                      <td class="text-success">{user.nik}</td>
                     </tr>
                     <tr>
-                      <th>Tanggal Pengaduan:</th>
+                      <th>No Handphone:</th>
                     </tr>
                     <tr>
-                      <td>{pengaduan.tanggal}</td>
+                      <td class="text-success">{user.telepon}</td>
+                    </tr>
+                    <tr>
+                      <th>Level:</th>
+                    </tr>
+                    <tr>
+                      <td class="text-success">{user.level}</td>
                     </tr>
                   </table>
+                </ModalBody>
+                  <ModalFooter>
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <Button color="primary">Do Something</Button>
+                      </div>
+                      <div>  
+                        <form action="?/deleteUser&id={user.id}" method="post">
+                          <Button color="danger" type="submit">DELETE</Button>
+                        </form>
+                      </div>
+                    </div>
+                  </ModalFooter>
                 </Modal>
               {/if}
             {/if}
-          {/each} -->
+            {/if}
+          {/each} 
         </tbody>
       </Table>
     </CardBody>
