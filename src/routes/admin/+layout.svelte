@@ -1,6 +1,7 @@
 <script lang="ts">
   // @ts-nocheck
   import {
+    Container,
     Collapse,
     Navbar,
     NavbarToggler,
@@ -30,15 +31,6 @@
     <NavbarToggler on:click={() => (isOpen = !isOpen)} />
     <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
       <Nav class="ms-auto" navbar>
-        {#if !data.user}
-          
-        <NavItem>
-          <NavLink href="/register">Register</NavLink>
-        </NavItem>
-        <NavItem>
-          <Button color="dark" href="/login">Login</Button>
-        </NavItem>
-        {:else}
         <NavItem>
           <NavLink href="/">Dashboard</NavLink>
         </NavItem>
@@ -65,8 +57,10 @@
             </DropdownMenu>
           </form>
         </Dropdown>
-        {/if}
       </Nav>
     </Collapse>
   </Navbar>
-<slot />
+
+  <Container fluid class="mt-3">    
+    <slot />
+  </Container>

@@ -6,12 +6,17 @@ export const load: LayoutServerLoad = async ({locals}) => {
     if(!(user && session)) {
         throw redirect(302, "/pengunjung")
     }
+
     const userDetail = await prisma.user.findUnique({
         where: {
             id: user.userId
         } 
     })
 
+    if(userDetail?.level != "MASYARAKAT"){
+        throw redirect(302, "/")
+    }
+    
     return {
         userDetail
     }
