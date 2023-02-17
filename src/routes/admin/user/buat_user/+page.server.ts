@@ -30,10 +30,10 @@ export const actions: Actions = {
                     level
                 }
             });
+            throw redirect(302, "/admin/user")
         } catch (error) {
             console.log(error);
             return fail(400, {message: "Tidak dapat membuat User"})
         }
-        throw redirect(302, "/admin/user")
     },
 };
