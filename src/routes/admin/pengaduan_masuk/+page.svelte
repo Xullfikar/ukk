@@ -19,8 +19,6 @@
         ModalFooter,
     } from "sveltestrap";
 
-    import DashboardCard from "$lib/component/DashboardCard.svelte";
-
     import type { PageData } from "./$types";
     export let data: PageData;
 
@@ -36,31 +34,16 @@
     const toggle = () => (open = !open);
 </script>
 
-<h2>Dashboard</h2>
+<h2>Pengaduan Masuk</h2>
 
-<!-- <Card color="secondary" body class="mt-2 mb-4">
-    <h6><b>Dashboard</b></h6>
-</Card> -->
-
-<Row>
-    <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Masuk" cardColor="primary" cardHref="/admin/pengaduan_masuk"/>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Diproses" cardColor="warning" cardHref="/admin/pengaduan_diproses"/>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Selesai" cardColor="success" cardHref="/admin/pengaduan_masuk"/>
-    </div>
-    <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Ditolak" cardColor="danger" cardHref="/admin/pengaduan_masuk"/>
-    </div>
-</Row>
+<Card color="secondary" body class="mt-2 mb-4">
+    <h6><a href="/admin">Dashboard</a> / Pengaduan Masuk</h6>
+</Card>
 
 <Card class="mt-1 mb-4">
     <CardHeader class="bg-secondary">
         <div class="d-flex justify-content-between align-items-center">
-            <b>Data Semua Pengaduan</b>
+            <b>Data Pengaduan</b>
             <div style="width: 200px;">
                 <Input placeholder="Search" bind:value={searchStr} />
             </div>

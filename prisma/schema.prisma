@@ -17,6 +17,7 @@ model User {
   Session   Session[]
   Key       Key[]
   Pengaduan Pengaduan[]
+  Tanggapan Tanggapan[]
 
   @@map("user")
 }
@@ -50,14 +51,15 @@ enum Level {
 }
 
 model Pengaduan {
-  id      BigInt   @id @default(autoincrement())
-  judul   String   @db.VarChar(255)
-  tanggal DateTime 
-  isi     String   @db.LongText
-  foto    String  @db.LongText
-  status  Status   @default(PENDING)
-  user_id String
-  user    User     @relation(references: [id], fields: [user_id])
+  id        BigInt      @id @default(autoincrement())
+  judul     String      @db.VarChar(255)
+  tanggal   DateTime
+  isi       String      @db.LongText
+  foto      String      @db.LongText
+  status    Status      @default(PENDING)
+  user_id   String
+  user      User        @relation(references: [id], fields: [user_id])
+  Tanggapan Tanggapan[]
 }
 
 enum Status {
@@ -65,4 +67,14 @@ enum Status {
   TOLAK
   PROSES
   SELESAI
+}
+
+model Tanggapan {
+  id           BigInt    @id @default(autoincrement())
+  id_pengaduan BigInt
+  pengaduan    Pengaduan @relation(references: [id], fields: [id_pengaduan])
+  tanggal      DateTime
+  tanggapan    String    @db.LongText
+  id_petugas   String
+  user         User      @relation(references: [id], fields: [id_petugas])
 }

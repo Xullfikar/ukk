@@ -12,6 +12,7 @@
   
     export let cardTitle = "";
     export let cardColor: any;
+    export let cardHref: any;
     export let cardFooterText = "View Details";
   </script>
   
@@ -20,7 +21,7 @@
       <CardText>{cardTitle}</CardText>
     </CardBody>
     <CardFooter class="d-flex align-items-center justify-content-between">
-      <a class="small text-white stretched-link" href="charts">
+      <a class="small text-white stretched-link" href={cardHref}>
         {cardFooterText}
       </a>
       <div class="small text-white">
