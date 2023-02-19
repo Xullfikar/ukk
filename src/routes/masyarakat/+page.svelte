@@ -17,9 +17,10 @@
   } from "sveltestrap";
 
   import type { PageData } from "./$types";
+  import DashboardCard from "$lib/component/DashboardCard.svelte";
 
   export let data: PageData;
-  $: ({ pengaduans } = data);
+  $: ({ pengaduans, userId } = data);
 
   let searchStr: any;
   let open = false;
@@ -31,13 +32,9 @@
     Idi = id;
   }
   const toggle = () => (open = !open);
-
-  console.log(Object.keys(total).length);
-  
-
 </script>
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center mb-2">
   <h2>Dashboard</h2>
   <Icon name="plus-square-fill" />
     <Button color="primary" href="/masyarakat/buat_pengaduan"
@@ -45,70 +42,31 @@
     >
 </div>
 
-<Card color="secondary" body class="mt-2 mb-4">
-  <h6><b>Dashboard</b></h6>
-</Card>
-
 <Row>
-  <Col>
-    <Card class="mb-3 text-white" color="danger">
-      <CardHeader>
-        <CardTitle>Ditolak</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <CardSubtitle>Total</CardSubtitle>
-        <CardText />
-        <Button>Periksa</Button>
-      </CardBody>
-      <CardFooter>
-        <a class="small text-white stretched-link" href="/masyarakat/ditolak">
-          Pengaduan Ditolak
-        </a>
-      </CardFooter>
-    </Card>
-  </Col>
-  <Col>
-    <Card class="mb-3 text-white" color="warning">
-      <CardHeader>
-        <CardTitle>Dalam Proses</CardTitle>
-      </CardHeader>
-      <CardBody>
-        <CardSubtitle>Total</CardSubtitle>
-        <CardText />
-        <Button>Periksa</Button>
-      </CardBody>
-      <CardFooter>
-        <a class="small text-white stretched-link" href="/masyarakat/proses">
-          Pengaduan Dalam Proses
-        </a>
-      </CardFooter>
-    </Card>
-  </Col>
-  <Col>
-    <Card class="mb-3 text-white" color="success">
-      <CardHeader>
-        <CardTitle>Selesai</CardTitle>
-      </CardHeader>
-      <CardBody>
-        {#each pengaduans as pengaduan}
-          {#if pengaduan.status == "SELESAI"}
-            {total.push(pengaduan.status)}
-            {/if}
-            {/each}
-            <h3>{total.length}</h3>
-      </CardBody>
-      <CardFooter>
-        <a class="small text-white stretched-link" href="/masyarakat/selesai">
-          Pengaduan Selesai
-        </a>
-      </CardFooter>
-    </Card>
-  </Col>
+  <div class="col-xl-4 col-md-6">
+      <DashboardCard
+          cardTitle="Pengaduan Diproses"
+          cardColor="warning"
+          cardHref="/masyarakat/proses"
+      />
+  </div>
+  <div class="col-xl-4 col-md-6">
+      <DashboardCard
+          cardTitle="Pengaduan Selesai"
+          cardColor="success"
+          cardHref="/masyarakat/selesai"
+      />
+  </div>
+  <div class="col-xl-4 col-md-6">
+      <DashboardCard
+          cardTitle="Pengaduan Ditolak"
+          cardColor="danger"
+          cardHref="/masyarakat/ditolak"
+      />
+  </div>
 </Row>
 
-
-
-<Card class="mt-3 mb-4">
+<Card class="mt-2 mb-4">
   <CardHeader class="bg-secondary">
     <div class="d-flex justify-content-between align-items-center">
       <b>Data Pengaduan</b>
@@ -128,6 +86,7 @@
       </thead>
       <tbody>
         {#each pengaduans as pengaduan}
+        {#if pengaduan.user_id == userId}          
           {#if pengaduan.judul.includes(searchStr)}
             <tr on:click={() => id(pengaduan.id)}>
               <td>{pengaduan.judul}</td>
@@ -166,6 +125,7 @@
                 </table>
               </Modal>
             {/if}
+          {/if}
           {/if}
         {/each}
       </tbody>

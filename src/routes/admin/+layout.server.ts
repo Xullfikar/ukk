@@ -1,7 +1,21 @@
+import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async ({locals}) => {
     const { user, session } = await locals.validateUser()
+    if(!(user && session)) {
+        throw redirect(302, "/pengunjung")
+    }
 
-    return {user}
+    const userDetail = await prisma.user.findUnique({
+        where: {
+            id: user.userId
+        } 
+    })
+
+    if(userDetail?.level == "MASYARAKAT"){
+        throw redirect(302, "/masyarakat")
+    }
+
+    return {userDetail}
 };

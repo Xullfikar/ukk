@@ -17,6 +17,6 @@ export const load: PageServerLoad = async ({locals}) => {
         } else if (level?.level == "ADMIN") {
             throw redirect(302, "/admin")
         } else if (level?.level == "PETUGAS") {
-            throw redirect(302, "/petugas")
+            throw redirect(302, "/admin")
         } 
 };

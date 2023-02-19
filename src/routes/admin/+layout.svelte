@@ -34,22 +34,35 @@
         <NavItem>
           <NavLink href="/">Dashboard</NavLink>
         </NavItem>
+        {#if data.userDetail?.level == "ADMIN"}
         <NavItem>
-          <NavLink href="/">User</NavLink>
+          <NavLink href="/admin/user">User</NavLink>
         </NavItem>
-        <NavItem>
-          <NavLink href="/">Pengaduan</NavLink>
-        </NavItem>
+        {/if}
+        <Dropdown nav inNavbar>
+          <DropdownToggle nav caret>Pengaduan</DropdownToggle>
+            <DropdownMenu end>
+              <DropdownItem href="/admin/masuk">Pengaduan Masuk</DropdownItem>
+              <DropdownItem divider />
+              <DropdownItem href="/admin/ditolak">Pengaduan Ditolak</DropdownItem>
+              <DropdownItem divider />
+              <DropdownItem href="/admin/diproses">Pengaduan Diproses</DropdownItem>
+              <DropdownItem divider />
+              <DropdownItem href="/admin/selesai">Pengaduan Selesai</DropdownItem>
+            </DropdownMenu>
+        </Dropdown>
+        {#if data.userDetail?.level == "ADMIN"}
         <NavItem>
           <NavLink href="/">Report</NavLink>
         </NavItem>
+        {/if}
         <Dropdown nav inNavbar>
-          <DropdownToggle nav caret>Nama Pengguna</DropdownToggle>
+          <DropdownToggle nav caret>{data.userDetail.level}</DropdownToggle>
           <form method="POST" action="/logout">
             <DropdownMenu end>
-              <DropdownItem>Nama</DropdownItem>
-              <DropdownItem>NIK</DropdownItem>
-              <DropdownItem>NoTelp</DropdownItem>
+              <DropdownItem>{data.userDetail.nama}</DropdownItem>
+              <DropdownItem>{data.userDetail.nik}</DropdownItem>
+              <DropdownItem>{data.userDetail.telepon}</DropdownItem>
               <DropdownItem divider />
               <DropdownItem type="submit"
                 >Logout</DropdownItem

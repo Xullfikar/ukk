@@ -11,6 +11,11 @@ export const load: PageServerLoad = async ({params}) => {
             include: {
                 user: true
             }
+        }),
+        tanggapans: await prisma.tanggapan.findMany({
+            where: {
+                id_pengaduan: Number(params.pengaduanId)
+            }
         })
     }
 };

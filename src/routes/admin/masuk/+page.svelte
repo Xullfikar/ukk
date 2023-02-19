@@ -19,12 +19,10 @@
         ModalFooter,
     } from "sveltestrap";
 
-    import DashboardCard from "$lib/component/DashboardCard.svelte";
-
     import type { PageData } from "./$types";
     export let data: PageData;
 
-    $: ({ tanggapans } = data);
+    $: ({ pengaduans } = data);
     let searchStr: any;
     let open = false;
     let Idi: any;
@@ -33,13 +31,13 @@
         open = !open;
         Idi = id;
     }
-    const toggle = () => (open = !open);   
+    const toggle = () => (open = !open);
 </script>
 
-<h2>Dashboard</h2>
+<h2>Pengaduan Masuk</h2>
 
 <Card color="secondary" body class="mt-2 mb-4">
-    <h6><a href="/admin">Dashboard</a> / Pengaduan Diproses</h6>
+    <h6><a href="/admin">Dashboard</a> / Pengaduan Masuk</h6>
 </Card>
 
 <Card class="mt-1 mb-4">
@@ -55,76 +53,74 @@
         <Table bordered responsive hover>
             <thead>
                 <tr>
-                    <th>NIK Pelapor</th>
-                    <th>Nama Pelapor</th>
+                    <th>NIK</th>
+                    <th>Nama</th>
                     <th>Judul Pengaduan</th>
                     <th>Tanggal</th>
                     <th>Status Verification</th>
-                    <th>Penanggung Jawab</th>
                 </tr>
             </thead>
             <tbody>
-                {#each tanggapans as tanggapan}
-                    {#if tanggapan.pengaduan.judul.includes(searchStr)}
-                        <tr on:click={() => id(tanggapan.pengaduan.id)}>
-                            <td>{tanggapan.pengaduan.user.nik}</td>
-                            <td>{tanggapan.pengaduan.user.nama}</td>
-                            <td>{tanggapan.pengaduan.judul}</td>
-                            <td>{tanggapan.pengaduan.tanggal}</td>
-                            <td>{tanggapan.pengaduan.status}</td>
-                            <td>{tanggapan.user.nama}</td>
+                {#each pengaduans as pengaduan}
+                    {#if pengaduan.judul.includes(searchStr)}
+                        <tr on:click={() => id(pengaduan.id)}>
+                            <td>{pengaduan.user.nik}</td>
+                            <td>{pengaduan.user.nama}</td>
+                            <td>{pengaduan.judul}</td>
+                            <td>{pengaduan.tanggal}</td>
+                            <td>{pengaduan.status}</td>
                         </tr>
-                        {#if Idi == tanggapan.pengaduan.id}
+                        {#if Idi == pengaduan.id}
                             <Modal isOpen={open} {toggle} scrollable>
                                 <ModalHeader {toggle}>
-                                    <h5>{tanggapan.pengaduan.judul}</h5>
+                                    <h5>{pengaduan.judul}</h5>
                                 </ModalHeader>
                                 <ModalBody>
                                     <!-- svelte-ignore a11y-missing-attribute -->
-                                    <img src={tanggapan.pengaduan.foto} width="100%" />
+                                    <img src={pengaduan.foto} width="100%" />
                                     <table class="mt-2">
                                         <tr>
                                             <th>NIK Pelapor:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{tanggapan.pengaduan.user.nik}</td>
+                                            <td class="text-success">{pengaduan.user.nik}</td>
                                         </tr>
                                         <tr>
                                             <th>Nama Pelapor:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{tanggapan.pengaduan.user.nama}</td>
+                                            <td class="text-success">{pengaduan.user.nama}</td>
                                         </tr>
                                         <tr>
                                             <th>Nomor Pelapor:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{tanggapan.pengaduan.user.telepon}</td>
+                                            <td class="text-success">{pengaduan.user.telepon}</td>
                                         </tr>
                                         <tr>
-                                            <th>Isi tanggapan.pengaduan:</th>
+                                            <th>Isi Pengaduan:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{tanggapan.pengaduan.isi}</td>
+                                            <td class="text-success">{pengaduan.isi}</td>
                                         </tr>
                                         <tr>
-                                            <th>Tanggal tanggapan.pengaduan:</th>
+                                            <th>Tanggal Pengaduan:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{tanggapan.pengaduan.tanggal}</td>
+                                            <td class="text-success">{pengaduan.tanggal}</td>
                                         </tr>
                                         <tr>
                                             <th>Status Verification:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{tanggapan.pengaduan.status}</td>
+                                            <td class="text-success">{pengaduan.status}</td>
                                         </tr>
                                     </table>
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button
                                         color="primary"
-                                        href="/admin/tanggapan/buat_tanggapan/{tanggapan.pengaduan.id}"
+                                        href="/admin/tanggapan/{pengaduan.id}"
                                         >Beri Tanggapan</Button
                                     >
                                 </ModalFooter>

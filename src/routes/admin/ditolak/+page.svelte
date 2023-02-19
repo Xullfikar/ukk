@@ -19,10 +19,12 @@
         ModalFooter,
     } from "sveltestrap";
 
+    import DashboardCard from "$lib/component/DashboardCard.svelte";
+
     import type { PageData } from "./$types";
     export let data: PageData;
 
-    $: ({ pengaduans } = data);
+    $: ({ tanggapans, pengaduans } = data);
     let searchStr: any;
     let open = false;
     let Idi: any;
@@ -31,13 +33,13 @@
         open = !open;
         Idi = id;
     }
-    const toggle = () => (open = !open);
+    const toggle = () => (open = !open);   
 </script>
 
-<h2>Pengaduan Masuk</h2>
+<h2>Pengaduan Ditolak</h2>
 
 <Card color="secondary" body class="mt-2 mb-4">
-    <h6><a href="/admin">Dashboard</a> / Pengaduan Masuk</h6>
+    <h6><a href="/admin">Dashboard</a> / Pengaduan Ditolak</h6>
 </Card>
 
 <Card class="mt-1 mb-4">
@@ -53,8 +55,8 @@
         <Table bordered responsive hover>
             <thead>
                 <tr>
-                    <th>NIK</th>
-                    <th>Nama</th>
+                    <th>NIK Pelapor</th>
+                    <th>Nama Pelapor</th>
                     <th>Judul Pengaduan</th>
                     <th>Tanggal</th>
                     <th>Status Verification</th>
@@ -98,17 +100,41 @@
                                             <td class="text-success">{pengaduan.user.telepon}</td>
                                         </tr>
                                         <tr>
-                                            <th>Isi Pengaduan:</th>
+                                            <th>Isi pengaduan:</th>
                                         </tr>
                                         <tr>
                                             <td class="text-success">{pengaduan.isi}</td>
                                         </tr>
                                         <tr>
-                                            <th>Tanggal Pengaduan:</th>
+                                            <th>Tanggal pengaduan:</th>
                                         </tr>
                                         <tr>
                                             <td class="text-success">{pengaduan.tanggal}</td>
                                         </tr>
+                                        <hr>
+                                        {#each tanggapans as tanggapan, i}
+                                            {#if Idi == tanggapan.id_pengaduan}
+                                            <tr>
+                                                <th>Tanggapan :</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">{tanggapan.tanggapan}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tanggal Ditanggapi :</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">{tanggapan.tanggal}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Penanggung Jawab:</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-success">{tanggapan.user.nama}</td>
+                                            </tr>
+                                            <hr>
+                                            {/if}
+                                        {/each}
                                         <tr>
                                             <th>Status Verification:</th>
                                         </tr>
@@ -117,13 +143,6 @@
                                         </tr>
                                     </table>
                                 </ModalBody>
-                                <ModalFooter>
-                                    <Button
-                                        color="primary"
-                                        href="/admin/tanggapan/buat_tanggapan/{pengaduan.id}"
-                                        >Beri Tanggapan</Button
-                                    >
-                                </ModalFooter>
                             </Modal>
                         {/if}
                     {/if}

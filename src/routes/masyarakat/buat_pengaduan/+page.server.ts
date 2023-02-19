@@ -13,7 +13,7 @@ export const actions: Actions = {
         const { judul, isi, foto } = Object.fromEntries(await request.formData()) as Record<string, string>
         
         try {
-            await prisma.pengaduan.create({
+            const buat = await prisma.pengaduan.create({
                 data: {
                     judul,
                     tanggal,
@@ -22,7 +22,9 @@ export const actions: Actions = {
                     user_id: user.userId
                 }
             })
-            throw redirect(302, "/masyarakat")
+            if(buat){
+                throw redirect(302, "/masyarakat")
+            }
         } catch (error) {
             console.log(error);
             return fail(500, {message: "Terjadi kesalahan saat mengirim pengaduan!"})

@@ -24,36 +24,56 @@
     import type { PageData } from "./$types";
     export let data: PageData;
 
-    $: ({ pengaduans } = data);
+    $: ({ pengaduans, userDetail, tanggapans } = data);
     let searchStr: any;
     let open = false;
     let Idi: any;
+    let userId: any;
 
     function id(id: BigInt) {
         open = !open;
         Idi = id;
+    }
+
+    function uId(uId: String) {
+        userId = uId;
+        console.log(userId);
+        console.log(userDetail?.id);
+        
     }
     const toggle = () => (open = !open);
 </script>
 
 <h2>Dashboard</h2>
 
-<!-- <Card color="secondary" body class="mt-2 mb-4">
-    <h6><b>Dashboard</b></h6>
-</Card> -->
-
 <Row>
     <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Masuk" cardColor="primary" cardHref="/admin/pengaduan_masuk"/>
+        <DashboardCard
+            cardTitle="Pengaduan Masuk"
+            cardColor="primary"
+            cardHref="/admin/masuk"
+        />
     </div>
     <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Diproses" cardColor="warning" cardHref="/admin/pengaduan_diproses"/>
+        <DashboardCard
+            cardTitle="Pengaduan Diproses"
+            cardColor="warning"
+            cardHref="/admin/diproses"
+        />
     </div>
     <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Selesai" cardColor="success" cardHref="/admin/pengaduan_masuk"/>
+        <DashboardCard
+            cardTitle="Pengaduan Selesai"
+            cardColor="success"
+            cardHref="/admin/selesai"
+        />
     </div>
     <div class="col-xl-3 col-md-6">
-        <DashboardCard cardTitle="Pengaduan Ditolak" cardColor="danger" cardHref="/admin/pengaduan_masuk"/>
+        <DashboardCard
+            cardTitle="Pengaduan Ditolak"
+            cardColor="danger"
+            cardHref="/admin/ditolak"
+        />
     </div>
 </Row>
 
@@ -100,47 +120,149 @@
                                             <th>NIK Pelapor:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{pengaduan.user.nik}</td>
+                                            <td class="text-success"
+                                                >{pengaduan.user.nik}</td
+                                            >
                                         </tr>
                                         <tr>
                                             <th>Nama Pelapor:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{pengaduan.user.nama}</td>
+                                            <td class="text-success"
+                                                >{pengaduan.user.nama}</td
+                                            >
                                         </tr>
                                         <tr>
                                             <th>Nomor Pelapor:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{pengaduan.user.telepon}</td>
+                                            <td class="text-success"
+                                                >{pengaduan.user.telepon}</td
+                                            >
                                         </tr>
                                         <tr>
                                             <th>Isi Pengaduan:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{pengaduan.isi}</td>
+                                            <td class="text-success"
+                                                >{pengaduan.isi}</td
+                                            >
                                         </tr>
                                         <tr>
                                             <th>Tanggal Pengaduan:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{pengaduan.tanggal}</td>
+                                            <td class="text-success"
+                                                >{pengaduan.tanggal}</td
+                                            >
                                         </tr>
+                                        <hr />
+                                        {#if userDetail?.level == "ADMIN"}
+                                            {#each tanggapans as tanggapan}
+                                                    {#if Idi == tanggapan.id_pengaduan}
+                                                        <tr>
+                                                            <th>Tanggapan :</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="text-success"
+                                                                >{tanggapan.tanggapan}</td
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <th
+                                                                >Tanggal
+                                                                Ditanggapi :</th
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="text-success"
+                                                                >{tanggapan.tanggal}</td
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <th
+                                                                >Penanggung
+                                                                Jawab:</th
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="text-success"
+                                                                >{tanggapan.user
+                                                                    .nama}</td
+                                                            >
+                                                        </tr>
+                                                        <hr />
+                                                    {/if}
+                                            {/each}
+                                        {:else}
+                                            {#each tanggapans as tanggapan}
+                                                {#if tanggapan.user.id == userDetail?.id}
+                                                    {#if Idi == tanggapan.id_pengaduan}
+                                                        <tr>
+                                                            <th>Tanggapan :</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="text-success"
+                                                                >{tanggapan.tanggapan}</td
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <th
+                                                                >Tanggal
+                                                                Ditanggapi :</th
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="text-success"
+                                                                >{tanggapan.tanggal}</td
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <Button on:click={() => uId(tanggapan.user.id)}>
+                                                                Tambah Tanggapan
+                                                            </Button>
+                                                        </tr>
+                                                        <hr />
+                                                    {/if}
+                                                {/if}
+                                            {/each}
+                                        {/if}
                                         <tr>
                                             <th>Status Verification:</th>
                                         </tr>
                                         <tr>
-                                            <td class="text-success">{pengaduan.status}</td>
+                                            <td class="text-success"
+                                                >{pengaduan.status}</td
+                                            >
                                         </tr>
                                     </table>
                                 </ModalBody>
-                                <ModalFooter>
-                                    <Button
-                                        color="primary"
-                                        href="/admin/tanggapan/buat_tanggapan/{pengaduan.id}"
-                                        >Beri Tanggapan</Button
-                                    >
-                                </ModalFooter>
+                                {#if pengaduan.status != "SELESAI" && pengaduan.status != "TOLAK"}
+                                {#if pengaduan.status == "PENDING"}
+                                    <ModalFooter>
+                                        <Button
+                                            color="primary"
+                                            href="/admin/tanggapan/{pengaduan.id}"
+                                            >Beri Tanggapan</Button
+                                        >
+                                    </ModalFooter>
+                                    {:else}
+                                    {#if userId == userDetail?.id}    
+                                    <ModalFooter>
+                                        <Button
+                                            color="primary"
+                                            href="/admin/tanggapan/{pengaduan.id}"
+                                            >Beri Tanggapan</Button
+                                        >
+                                    </ModalFooter>
+                                    {/if}
+                                    {/if}
+                                {/if}
                             </Modal>
                         {/if}
                     {/if}

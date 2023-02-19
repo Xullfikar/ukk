@@ -3,8 +3,18 @@ import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    const session = await locals.validate()
-    if(!session) {
+    const {user, session} = await locals.validateUser()
+    if(!(user && session)) {
+        throw redirect(302, "/pengunjung")
+    }
+    
+    const userDetail = await prisma.user.findUnique({
+        where: {
+            id: user?.userId
+        } 
+    })
+
+    if(userDetail?.level != "ADMIN"){
         throw redirect(302, "/")
     }
 };
