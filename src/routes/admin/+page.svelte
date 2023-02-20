@@ -80,6 +80,7 @@
     </CardHeader>
     <CardBody>
         <Table bordered responsive hover>
+            {#if userDetail?.level == "ADMIN"}
             <thead>
                 <tr>
                     <th>NIK</th>
@@ -87,18 +88,23 @@
                     <th>Judul Pengaduan</th>
                     <th>Tanggal</th>
                     <th>Status Verification</th>
+                    <th>Penanggung Jawab</th>
                 </tr>
             </thead>
-            {#if userDetail?.level == "ADMIN"}
             <tbody>
                 {#each pengaduans as pengaduan}
-                {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.user.nik?.includes(searchStr) || pengaduan.user.nama?.toLowerCase().includes(searchStr.toLowerCase())}
+                {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.user.nik?.includes(searchStr) || pengaduan.user.nama?.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.Tanggapan[0]?.user.nama.toLowerCase().includes(searchStr.toLowerCase())}
                 <tr on:click={() => id(pengaduan.id)}>
                             <td>{pengaduan.user.nik}</td>
                             <td>{pengaduan.user.nama}</td>
                             <td>{pengaduan.judul}</td>
                             <td>{pengaduan.tanggal}</td>
                             <td>{pengaduan.status}</td>
+                            {#if pengaduan.status != "PENDING"}
+                            <td>{pengaduan.Tanggapan[0].user.nama}</td>
+                            {:else}
+                            <td>Belum Ditanggapi</td>
+                            {/if}
                         </tr>
                         {#if Idi == pengaduan.id}
                             <Modal isOpen={open} {toggle} scrollable>
@@ -224,10 +230,19 @@
                 {/each}
             </tbody>
             {:else}
+            <thead>
+                <tr>
+                    <th>NIK</th>
+                    <th>Nama</th>
+                    <th>Judul Pengaduan</th>
+                    <th>Tanggal</th>
+                    <th>Status Verification</th>
+                </tr>
+            </thead>
             <tbody>
                 {#each pengaduans as pengaduan}
-                {#if pengaduan.status != "PENDING"}
-                {#if pengaduan.Tanggapan[0].user.id == userDetail?.id}
+                <!-- {#if pengaduan.status != "PENDING"} -->
+                {#if pengaduan.status == "PENDING" || pengaduan.Tanggapan[0].user.id == userDetail?.id}
                 {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.user.nik?.includes(searchStr) || pengaduan.user.nama?.toLowerCase().includes(searchStr.toLowerCase())}
                 <tr on:click={() => id(pengaduan.id)}>
                             <td>{pengaduan.user.nik}</td>
@@ -348,7 +363,7 @@
                         {/if}
                     {/if}
                     {/if}
-                    {/if}
+                    <!-- {/if} -->
                 {/each}
             </tbody>
             {/if}

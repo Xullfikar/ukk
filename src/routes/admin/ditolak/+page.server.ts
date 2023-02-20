@@ -1,20 +1,32 @@
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async () => {
-    return {
-        tanggapans: await prisma.tanggapan.findMany({
-            include: {
-                user: true,
-            }
-        }),
+export const load: PageServerLoad = async ({locals}) => {
+    const { user, session } = await locals.validateUser()
+    if(!(user && session)) {
+        throw redirect(302, "/pengunjung")
+    }
 
+    const userDetail = await prisma.user.findUnique({
+        where: {
+            id: user.userId
+        } 
+    })
+
+    return {
         pengaduans: await prisma.pengaduan.findMany({
             where: {
                 status: "TOLAK"
             },
             include: {
-                user: true
+                user: true,
+                Tanggapan: {
+                    include: {
+                        user: true
+                    }
+                }
             }
-        })
+        }),
+        userDetail
     }
 };
