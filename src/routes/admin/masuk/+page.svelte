@@ -17,13 +17,15 @@
         ModalHeader,
         ModalBody,
         ModalFooter,
+        Breadcrumb,
+        BreadcrumbItem
     } from "sveltestrap";
 
     import type { PageData } from "./$types";
     export let data: PageData;
 
     $: ({ pengaduans } = data);
-    let searchStr: any;
+    let searchStr = "";
     let open = false;
     let Idi: any;
 
@@ -36,9 +38,12 @@
 
 <h2>Pengaduan Masuk</h2>
 
-<Card color="secondary" body class="mt-2 mb-4">
-    <h6><a href="/admin">Dashboard</a> / Pengaduan Masuk</h6>
-</Card>
+<Breadcrumb>
+    <BreadcrumbItem>
+      <a href="/admin">Dashboard</a>
+    </BreadcrumbItem>
+    <BreadcrumbItem active>Pengaduan Masuk</BreadcrumbItem>
+  </Breadcrumb>
 
 <Card class="mt-1 mb-4">
     <CardHeader class="bg-secondary">
@@ -62,7 +67,7 @@
             </thead>
             <tbody>
                 {#each pengaduans as pengaduan}
-                    {#if pengaduan.judul.includes(searchStr)}
+                {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.user.nik?.includes(searchStr) || pengaduan.user.nama?.toLowerCase().includes(searchStr.toLowerCase())}
                         <tr on:click={() => id(pengaduan.id)}>
                             <td>{pengaduan.user.nik}</td>
                             <td>{pengaduan.user.nama}</td>

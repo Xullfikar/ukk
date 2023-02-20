@@ -13,13 +13,15 @@
     Row,
     Table,
     Modal,
+    Breadcrumb,
+    BreadcrumbItem
   } from "sveltestrap";
 
   import type { PageData } from "./$types";
   export let data: PageData;
-  $: ({ pengaduans } = data);
+  $: ({ pengaduans, tanggapans } = data);
 
-  let searchStr: any;
+  let searchStr = "";
   let open = false;
   let Idi: any;
 
@@ -32,9 +34,12 @@
 
 <h2>Pengaduan Selesai</h2>
 
-<Card color="secondary" body class="mt-2 mb-4">
-  <h6><b><a href="/masyarakat">Dashboard</a> / Selesai</b></h6>
-</Card>
+<Breadcrumb>
+  <BreadcrumbItem>
+    <a href="/masyarakat">Dashboard</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem active>Selesai</BreadcrumbItem>
+</Breadcrumb>
 
 <Card class="mt-3 mb-4">
   <CardHeader class="bg-secondary">
@@ -56,7 +61,7 @@
       </thead>
       <tbody>
         {#each pengaduans as pengaduan}
-          {#if pengaduan.judul.includes(searchStr)}
+        {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase())}
             <tr on:click={() => id(pengaduan.id)}>
               <td>{pengaduan.judul}</td>
               <td>{pengaduan.tanggal}</td>
@@ -91,6 +96,30 @@
                   <tr>
                     <td>{pengaduan.tanggal}</td>
                   </tr>
+                  <hr />
+                    {#each tanggapans as tanggapan}
+                      {#if Idi == tanggapan.id_pengaduan}
+                        <tr>
+                          <th>Tanggapan :</th>
+                        </tr>
+                        <tr>
+                          <td class="text-success">{tanggapan.tanggapan}</td>
+                        </tr>
+                        <tr>
+                          <th>Tanggal Ditanggapi :</th>
+                        </tr>
+                        <tr>
+                          <td class="text-success">{tanggapan.tanggal}</td>
+                        </tr>
+                        <tr>
+                          <th>Penanggung Jawab:</th>
+                        </tr>
+                        <tr>
+                          <td class="text-success">{tanggapan.user.nama}</td>
+                        </tr>
+                        <hr />
+                      {/if}
+                    {/each}
                 </table>
               </Modal>
             {/if}

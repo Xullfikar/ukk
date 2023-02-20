@@ -8,7 +8,7 @@ export const actions: Actions = {
             throw redirect(302, "/")
         }
 
-        const tanggal = new Date()
+        const tanggal = new Date().toDateString()
         
         const { judul, isi, foto } = Object.fromEntries(await request.formData()) as Record<string, string>
         
@@ -22,12 +22,10 @@ export const actions: Actions = {
                     user_id: user.userId
                 }
             })
-            if(buat){
-                throw redirect(302, "/masyarakat")
-            }
         } catch (error) {
             console.log(error);
             return fail(500, {message: "Terjadi kesalahan saat mengirim pengaduan!"})
         } 
+        throw redirect(302, "/masyarakat")
     }
 };

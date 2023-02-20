@@ -8,7 +8,15 @@ export const load: PageServerLoad = async ({locals}) => {
     }
 
     return {
-        pengaduans: await prisma.pengaduan.findMany(),
-        userId: user?.userId
+        pengaduans: await prisma.pengaduan.findMany({
+            where: {
+                user_id: user?.userId
+            }
+        }),
+        tanggapans: await prisma.tanggapan.findMany({
+            include: {
+                user: true,
+            }
+        }),
     }
 };

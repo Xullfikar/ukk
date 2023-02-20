@@ -24,22 +24,14 @@
     import type { PageData } from "./$types";
     export let data: PageData;
 
-    $: ({ pengaduans, userDetail, tanggapans } = data);
-    let searchStr: any;
+    $: ({ pengaduans, userDetail} = data);
+    let searchStr = "";
     let open = false;
     let Idi: any;
-    let userId: any;
 
     function id(id: BigInt) {
         open = !open;
         Idi = id;
-    }
-
-    function uId(uId: String) {
-        userId = uId;
-        console.log(userId);
-        console.log(userDetail?.id);
-        
     }
     const toggle = () => (open = !open);
 </script>
@@ -97,10 +89,11 @@
                     <th>Status Verification</th>
                 </tr>
             </thead>
+            {#if userDetail?.level == "ADMIN"}
             <tbody>
                 {#each pengaduans as pengaduan}
-                    {#if pengaduan.judul.includes(searchStr)}
-                        <tr on:click={() => id(pengaduan.id)}>
+                {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.user.nik?.includes(searchStr) || pengaduan.user.nama?.toLowerCase().includes(searchStr.toLowerCase())}
+                <tr on:click={() => id(pengaduan.id)}>
                             <td>{pengaduan.user.nik}</td>
                             <td>{pengaduan.user.nama}</td>
                             <td>{pengaduan.judul}</td>
@@ -157,9 +150,7 @@
                                             >
                                         </tr>
                                         <hr />
-                                        {#if userDetail?.level == "ADMIN"}
-                                            {#each tanggapans as tanggapan}
-                                                    {#if Idi == tanggapan.id_pengaduan}
+                                            {#each pengaduan.Tanggapan as tanggapan}
                                                         <tr>
                                                             <th>Tanggapan :</th>
                                                         </tr>
@@ -195,12 +186,107 @@
                                                             >
                                                         </tr>
                                                         <hr />
-                                                    {/if}
                                             {/each}
-                                        {:else}
-                                            {#each tanggapans as tanggapan}
-                                                {#if tanggapan.user.id == userDetail?.id}
-                                                    {#if Idi == tanggapan.id_pengaduan}
+                                        <tr>
+                                            <th>Status Verification:</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success"
+                                                >{pengaduan.status}</td
+                                            >
+                                        </tr>
+                                    </table>
+                                </ModalBody>
+                                {#if pengaduan.status != "SELESAI" && pengaduan.status != "TOLAK"}
+                                {#if pengaduan.status == "PENDING"}
+                                    <ModalFooter>
+                                        <Button
+                                            color="primary"
+                                            href="/admin/tanggapan/{pengaduan.id}"
+                                            >Beri Tanggapan</Button
+                                        >
+                                    </ModalFooter>
+                                    {:else}
+                                    {#if pengaduan.Tanggapan[0].user.id == userDetail?.id}
+                                    <ModalFooter>
+                                        <Button
+                                            color="primary"
+                                            href="/admin/tanggapan/{pengaduan.id}"
+                                            >Beri Tanggapan</Button
+                                        >
+                                    </ModalFooter>
+                                    {/if}
+                                    {/if}
+                                {/if}
+                            </Modal>
+                        {/if}
+                    {/if}
+                {/each}
+            </tbody>
+            {:else}
+            <tbody>
+                {#each pengaduans as pengaduan}
+                {#if pengaduan.status != "PENDING"}
+                {#if pengaduan.Tanggapan[0].user.id == userDetail?.id}
+                {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase()) || pengaduan.user.nik?.includes(searchStr) || pengaduan.user.nama?.toLowerCase().includes(searchStr.toLowerCase())}
+                <tr on:click={() => id(pengaduan.id)}>
+                            <td>{pengaduan.user.nik}</td>
+                            <td>{pengaduan.user.nama}</td>
+                            <td>{pengaduan.judul}</td>
+                            <td>{pengaduan.tanggal}</td>
+                            <td>{pengaduan.status}</td>
+                        </tr>
+                        {#if Idi == pengaduan.id}
+                            <Modal isOpen={open} {toggle} scrollable>
+                                <ModalHeader {toggle}>
+                                    <h5>{pengaduan.judul}</h5>
+                                </ModalHeader>
+                                <ModalBody>
+                                    <!-- svelte-ignore a11y-missing-attribute -->
+                                    <img src={pengaduan.foto} width="100%" />
+                                    <table class="mt-2">
+                                        <tr>
+                                            <th>NIK Pelapor:</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success"
+                                                >{pengaduan.user.nik}</td
+                                            >
+                                        </tr>
+                                        <tr>
+                                            <th>Nama Pelapor:</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success"
+                                                >{pengaduan.user.nama}</td
+                                            >
+                                        </tr>
+                                        <tr>
+                                            <th>Nomor Pelapor:</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success"
+                                                >{pengaduan.user.telepon}</td
+                                            >
+                                        </tr>
+                                        <tr>
+                                            <th>Isi Pengaduan:</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success"
+                                                >{pengaduan.isi}</td
+                                            >
+                                        </tr>
+                                        <tr>
+                                            <th>Tanggal Pengaduan:</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success"
+                                                >{pengaduan.tanggal}</td
+                                            >
+                                        </tr>
+                                        <hr />
+                                            {#each pengaduan.Tanggapan as tanggapan}
                                                         <tr>
                                                             <th>Tanggapan :</th>
                                                         </tr>
@@ -223,15 +309,20 @@
                                                             >
                                                         </tr>
                                                         <tr>
-                                                            <Button on:click={() => uId(tanggapan.user.id)}>
-                                                                Tambah Tanggapan
-                                                            </Button>
+                                                            <th
+                                                                >Penanggung
+                                                                Jawab:</th
+                                                            >
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="text-success"
+                                                                >{tanggapan.user
+                                                                    .nama}</td
+                                                            >
                                                         </tr>
                                                         <hr />
-                                                    {/if}
-                                                {/if}
                                             {/each}
-                                        {/if}
                                         <tr>
                                             <th>Status Verification:</th>
                                         </tr>
@@ -243,7 +334,7 @@
                                     </table>
                                 </ModalBody>
                                 {#if pengaduan.status != "SELESAI" && pengaduan.status != "TOLAK"}
-                                {#if pengaduan.status == "PENDING"}
+                                    {#if pengaduan.Tanggapan[0].user.id == userDetail?.id}
                                     <ModalFooter>
                                         <Button
                                             color="primary"
@@ -251,23 +342,16 @@
                                             >Beri Tanggapan</Button
                                         >
                                     </ModalFooter>
-                                    {:else}
-                                    {#if userId == userDetail?.id}    
-                                    <ModalFooter>
-                                        <Button
-                                            color="primary"
-                                            href="/admin/tanggapan/{pengaduan.id}"
-                                            >Beri Tanggapan</Button
-                                        >
-                                    </ModalFooter>
-                                    {/if}
                                     {/if}
                                 {/if}
                             </Modal>
                         {/if}
                     {/if}
+                    {/if}
+                    {/if}
                 {/each}
             </tbody>
+            {/if}
         </Table>
     </CardBody>
 </Card>

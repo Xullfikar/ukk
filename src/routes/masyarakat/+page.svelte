@@ -13,16 +13,16 @@
     Row,
     Table,
     Modal,
-    Icon
+    Icon,
   } from "sveltestrap";
 
   import type { PageData } from "./$types";
   import DashboardCard from "$lib/component/DashboardCard.svelte";
 
   export let data: PageData;
-  $: ({ pengaduans, userId } = data);
+  $: ({ pengaduans, tanggapans } = data);
 
-  let searchStr: any;
+  let searchStr = "";
   let open = false;
   let Idi: any;
   let total: Array<string> = [];
@@ -37,32 +37,32 @@
 <div class="d-flex justify-content-between align-items-center mb-2">
   <h2>Dashboard</h2>
   <Icon name="plus-square-fill" />
-    <Button color="primary" href="/masyarakat/buat_pengaduan"
-      ><h6><Icon name="plus-square-fill" /> <b>Buat Pengaduan</b></h6></Button
-    >
+  <Button color="primary" href="/masyarakat/buat_pengaduan"
+    ><h6><Icon name="plus-square-fill" /> <b>Buat Pengaduan</b></h6></Button
+  >
 </div>
 
 <Row>
   <div class="col-xl-4 col-md-6">
-      <DashboardCard
-          cardTitle="Pengaduan Diproses"
-          cardColor="warning"
-          cardHref="/masyarakat/proses"
-      />
+    <DashboardCard
+      cardTitle="Pengaduan Diproses"
+      cardColor="warning"
+      cardHref="/masyarakat/proses"
+    />
   </div>
   <div class="col-xl-4 col-md-6">
-      <DashboardCard
-          cardTitle="Pengaduan Selesai"
-          cardColor="success"
-          cardHref="/masyarakat/selesai"
-      />
+    <DashboardCard
+      cardTitle="Pengaduan Selesai"
+      cardColor="success"
+      cardHref="/masyarakat/selesai"
+    />
   </div>
   <div class="col-xl-4 col-md-6">
-      <DashboardCard
-          cardTitle="Pengaduan Ditolak"
-          cardColor="danger"
-          cardHref="/masyarakat/ditolak"
-      />
+    <DashboardCard
+      cardTitle="Pengaduan Ditolak"
+      cardColor="danger"
+      cardHref="/masyarakat/ditolak"
+    />
   </div>
 </Row>
 
@@ -86,47 +86,69 @@
       </thead>
       <tbody>
         {#each pengaduans as pengaduan}
-        {#if pengaduan.user_id == userId}          
-          {#if pengaduan.judul.includes(searchStr)}
-            <tr on:click={() => id(pengaduan.id)}>
-              <td>{pengaduan.judul}</td>
-              <td>{pengaduan.tanggal}</td>
-              <td>{pengaduan.status}</td>
-            </tr>
-            {#if Idi == pengaduan.id}
-              <Modal
-                body
-                header={pengaduan.judul}
-                isOpen={open}
-                {toggle}
-                scrollable
-              >
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <img src={pengaduan.foto} width="100%" />
-                <table class="mt-2">
-                  <tr>
-                    <th>Isi Pengaduan:</th>
-                  </tr>
-                  <tr>
-                    <td>{pengaduan.isi}</td>
-                  </tr>
-                  <tr>
-                    <th>Status Verification:</th>
-                  </tr>
-                  <tr>
-                    <td>{pengaduan.status}</td>
-                  </tr>
-                  <tr>
-                    <th>Tanggal Pengaduan:</th>
-                  </tr>
-                  <tr>
-                    <td>{pengaduan.tanggal}</td>
-                  </tr>
-                </table>
-              </Modal>
+            {#if pengaduan.judul.toLowerCase().includes(searchStr.toLowerCase())}
+              <tr on:click={() => id(pengaduan.id)}>
+                <td>{pengaduan.judul}</td>
+                <td>{pengaduan.tanggal}</td>
+                <td>{pengaduan.status}</td>
+              </tr>
+              {#if Idi == pengaduan.id}
+                <Modal
+                  body
+                  header={pengaduan.judul}
+                  isOpen={open}
+                  {toggle}
+                  scrollable
+                >
+                  <!-- svelte-ignore a11y-missing-attribute -->
+                  <img src={pengaduan.foto} width="100%" />
+                  <table class="mt-2">
+                    <tr>
+                      <th>Isi Pengaduan:</th>
+                    </tr>
+                    <tr>
+                      <td>{pengaduan.isi}</td>
+                    </tr>
+                    <tr>
+                      <th>Status Verification:</th>
+                    </tr>
+                    <tr>
+                      <td>{pengaduan.status}</td>
+                    </tr>
+                    <tr>
+                      <th>Tanggal Pengaduan:</th>
+                    </tr>
+                    <tr>
+                      <td>{pengaduan.tanggal}</td>
+                    </tr>
+                    <hr />
+                    {#each tanggapans as tanggapan}
+                      {#if Idi == tanggapan.id_pengaduan}
+                        <tr>
+                          <th>Tanggapan :</th>
+                        </tr>
+                        <tr>
+                          <td class="text-success">{tanggapan.tanggapan}</td>
+                        </tr>
+                        <tr>
+                          <th>Tanggal Ditanggapi :</th>
+                        </tr>
+                        <tr>
+                          <td class="text-success">{tanggapan.tanggal}</td>
+                        </tr>
+                        <tr>
+                          <th>Penanggung Jawab:</th>
+                        </tr>
+                        <tr>
+                          <td class="text-success">{tanggapan.user.nama}</td>
+                        </tr>
+                        <hr />
+                      {/if}
+                    {/each}
+                  </table>
+                </Modal>
+              {/if}
             {/if}
-          {/if}
-          {/if}
         {/each}
       </tbody>
     </Table>

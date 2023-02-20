@@ -53,7 +53,7 @@ enum Level {
 model Pengaduan {
   id        BigInt      @id @default(autoincrement())
   judul     String      @db.VarChar(255)
-  tanggal   DateTime
+  tanggal   String
   isi       String      @db.LongText
   foto      String      @db.LongText
   status    Status      @default(PENDING)
@@ -73,7 +73,7 @@ model Tanggapan {
   id           BigInt    @id @default(autoincrement())
   id_pengaduan BigInt
   pengaduan    Pengaduan @relation(references: [id], fields: [id_pengaduan])
-  tanggal      DateTime
+  tanggal      String
   tanggapan    String    @db.LongText
   id_petugas   String
   user         User      @relation(references: [id], fields: [id_petugas])

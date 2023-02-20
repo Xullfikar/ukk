@@ -20,16 +20,14 @@ export const load: PageServerLoad = async ({locals}) => {
     return {
         pengaduans: await prisma.pengaduan.findMany({
             include: {
-                user: true
-            }
-        }),
-
-        tanggapans: await prisma.tanggapan.findMany({
-            include: {
                 user: true,
+                Tanggapan: {
+                    include: {
+                        user: true
+                    }
+                }
             }
         }),
-        
         userDetail
     }
 };

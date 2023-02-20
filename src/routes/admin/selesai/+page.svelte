@@ -19,8 +19,6 @@
         ModalFooter,
     } from "sveltestrap";
 
-    import DashboardCard from "$lib/component/DashboardCard.svelte";
-
     import type { PageData } from "./$types";
     export let data: PageData;
 
