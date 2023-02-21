@@ -53,7 +53,7 @@
         </Dropdown>
         {#if data.userDetail?.level == "ADMIN"}
         <NavItem>
-          <NavLink href="/">Report</NavLink>
+          <NavLink href="/admin/report">Report</NavLink>
         </NavItem>
         {/if}
         <Dropdown nav inNavbar>
