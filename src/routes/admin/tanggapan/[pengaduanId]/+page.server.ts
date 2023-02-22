@@ -28,7 +28,7 @@ export const actions: Actions = {
             throw redirect(302, "/")
         }
 
-        const tanggal = new Date();
+        const tanggal = new Date().toLocaleDateString();
 
         const { tanggapan, status } = Object.fromEntries(await request.formData()) as {
             tanggapan: string,

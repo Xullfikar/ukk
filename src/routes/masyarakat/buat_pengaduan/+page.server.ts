@@ -8,7 +8,7 @@ export const actions: Actions = {
             throw redirect(302, "/")
         }
 
-        const tanggal = new Date().toDateString()
+        const tanggal = new Date().toLocaleDateString();
         
         const { judul, isi, foto } = Object.fromEntries(await request.formData()) as Record<string, string>
         

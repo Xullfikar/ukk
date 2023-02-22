@@ -18,7 +18,7 @@
   }
 </script>
 
-<Navbar color="primary" dark expand="md">
+<Navbar color="primary" class="fixed-top" dark expand="md">
   <NavbarBrand href="/">Pengaduan Masyarakat</NavbarBrand>
   <NavbarToggler on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>

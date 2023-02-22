@@ -9,21 +9,23 @@
         Button
     } from "sveltestrap";
 
-    // import { utils, write } from "xlsx";
-    // import saveAs from "file-saver";
     import { jsPDF } from "jspdf";
     import autoTable from 'jspdf-autotable';
-    import { onMount } from "svelte";
 
     import type { PageData } from "./$types";
     export let data: PageData;
     let table: HTMLTableElement;
+    const tanggal = new Date().toLocaleDateString();
 
     $: ({ pengaduans, userDetail } = data);
     
-    const doc = new jsPDF();
+    const doc = new jsPDF({
+        orientation: "l"
+    });
     const generateLaporan = () => {
-        autoTable(doc, { html: table})
+        doc.text("Laporan Pengaduan", 15, 10)
+        doc.text("Tanggal cetak: " + tanggal, 15, 18)
+        autoTable(doc, { html: table, startY: 21})
         doc.save("table.pdf");
     }
 </script>
@@ -43,7 +45,7 @@
 <Card>
     <CardHeader class="bg-secondary">All Data</CardHeader>
     <CardBody>
-            <table class="bordered" bind:this={table}>
+            <table class="table-bordered" bind:this={table}>
             <thead>
                 <tr>
                     <th>NIK Pelapor</th>
