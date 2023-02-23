@@ -14,9 +14,10 @@
     Row,
   } from "sveltestrap";
 
-  import type { PageData } from "../[pengaduanId]/$types";
+  import type { PageData, ActionData } from "../[pengaduanId]/$types";
   export let data: PageData;
   $: ({ pengaduan, tanggapans } = data);
+  export let form: ActionData;
 </script>
 
 <h2>Buat Tanggapan</h2>
@@ -94,29 +95,32 @@
             type="textarea"
             name="tanggapan"
             placeholder="Enter tanggapan"
+            required
+            value={form?.tanggapan}
           />
           <Input type="text" name="id_pengaduan" value={pengaduan?.id} hidden />
         </FormGroup>
+        {#if form?.missingStatus}<p class="text-danger">*Status harus dipilih atau ditingkatkan</p>{/if}
       </CardBody>
       <CardFooter>
-        <div class="d-flex flex-row-reverse flex-wrap align-items-center">
+        <div class="d-flex flex-row-reverse align-items-center">
           <div class="ms-3">
             <Button type="submit" color="primary" class="px-5">Kirim</Button>
           </div>
           <div class="ms-3">
             <select name="status" id="Status" class="px-4 py-1">
               {#if pengaduan?.status == "PENDING"}
-                <option selected hidden>Pilih Status</option>
+                <option selected hidden value="">Pilih Status</option>
+                <option value="PROSES">Proses</option>
+                <option value="TOLAK">Tolak</option>
               {:else if pengaduan?.status == "PROSES"}
-                <option value="PROSES" selected hidden>Proses</option>
+                <option value="" selected hidden>Proses</option>
+                <option value="SELESAI">Selesai</option>
               {:else if pengaduan?.status == "SELESAI"}
                 <option value="SELESAI" selected hidden>Selesai</option>
               {:else if pengaduan?.status == "TOLAK"}
               <option value="TOLAK" selected hidden>Tolak</option>
               {/if}
-              <option value="PROSES">Proses</option>
-              <option value="SELESAI">Selesai</option>
-              <option value="TOLAK">Tolak</option>
             </select>
           </div>
         </div>

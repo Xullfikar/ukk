@@ -349,7 +349,7 @@
                                     </table>
                                 </ModalBody>
                                 {#if pengaduan.status != "SELESAI" && pengaduan.status != "TOLAK"}
-                                    {#if pengaduan.Tanggapan[0].user.id == userDetail?.id}
+                                    {#if pengaduan.status == "PENDING" || pengaduan.Tanggapan[0].user.id == userDetail?.id}
                                     <ModalFooter>
                                         <Button
                                             color="primary"

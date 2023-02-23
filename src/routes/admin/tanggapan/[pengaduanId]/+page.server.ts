@@ -1,17 +1,23 @@
 import { prisma } from "$lib/server/prisma";
 import { fail, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "../[pengaduanId]/$types";
 
 export const load: PageServerLoad = async ({params}) => {
+    const pengaduan = await prisma.pengaduan.findUnique({
+        where: {
+            id: Number(params.pengaduanId)
+        },
+        include: {
+            user: true
+        }
+    });
+
+    if(pengaduan?.status == "SELESAI") {
+        throw redirect(302, "/admin")
+    }
+    
     return {
-        pengaduan: await prisma.pengaduan.findUnique({
-            where: {
-                id: Number(params.pengaduanId)
-            },
-            include: {
-                user: true
-            }
-        }),
+        pengaduan,
         tanggapans: await prisma.tanggapan.findMany({
             where: {
                 id_pengaduan: Number(params.pengaduanId)
@@ -35,6 +41,10 @@ export const actions: Actions = {
             status: any
         }
 
+        if(!status) {
+            return fail(400, { tanggapan, missingStatus: true })
+        }
+
         try {
             await prisma.pengaduan.update({
                 where: {
@@ -54,10 +64,10 @@ export const actions: Actions = {
                 }
             })
 
-            throw redirect(302, "/admin")
         } catch (error) {
             console.log(error);
             return fail(500, {message: "Terjadi kesalahan saat memberi Tanggapan!"})
         }
+        throw redirect(302, "/admin")
     }
 };

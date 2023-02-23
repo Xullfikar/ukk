@@ -10,6 +10,7 @@
     Row,
     Col,
   } from "sveltestrap";
+  import CardFooter from "sveltestrap/src/CardFooter.svelte";
 
   // let imageGenerated: any;
   let files: any;
@@ -39,6 +40,7 @@
             name="judul"
             id="inputJudul"
             placeholder="Enter judul pengaduan"
+            required
           />
         </FormGroup>
         <FormGroup>
@@ -50,13 +52,13 @@
             name="isi"
             id="inputIsi"
             placeholder="Enter isi pengaduan"
+            required
           />
         </FormGroup>
         <FormGroup>
           <Label for="foto" class="small mb-1"
             ><h6>Foto Bukti Pengaduan</h6></Label
           >
-          <!-- <Input class="py-4" type="file" name="foto" id="foto" /> -->
           <Input
             accept="image/png, image/jpeg"
             bind:files
@@ -64,11 +66,12 @@
             id="image"
             name="image"
             type="file"
+            required
           />
-          <small>Max 900kb*</small>
+          <small>Max 300kb*</small>
           {#if files}
-            {#if Number(files[0].size) / 1024 > 900}
-              <p style="color:red">File too big!</p>
+            {#if Number(files[0].size) / 1024 > 300}
+              <p class="text-danger">File too big!</p>
             {/if}
           {/if}
           <Input
@@ -81,7 +84,13 @@
           />
         </FormGroup>
         <FormGroup class="mt-4 mb-0">
-          <Button color="primary" block type="submit">Kirim</Button>
+          {#if !files}
+            <Button color="primary" block type="submit" disabled>Kirim</Button>
+          {:else if Number(files[0].size) / 1024 > 300}
+            <Button color="primary" block type="submit" disabled>Kirim</Button>
+          {:else}
+            <Button color="primary" block type="submit">Kirim</Button>
+          {/if}
         </FormGroup>
       </Form>
     </CardBody>

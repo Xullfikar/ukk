@@ -14,6 +14,16 @@ export const actions: Actions = {
         const { username, password } = Object.fromEntries(
             await request.formData(),
         ) as Record<string, string>
+
+        const usernameCheck = await prisma.user.findUnique({
+            where: {
+                username: username
+            }
+        })
+
+        if(!usernameCheck) {
+            return fail(400, { username, noUsername: true })
+        }
     
         try {
             const key = await auth.validateKeyPassword("username", username, password)
@@ -21,7 +31,7 @@ export const actions: Actions = {
             locals.setSession(session)
         } catch (error) {
             console.log(error);
-            return fail(400, { message: "User tidak dapat login" })
+            return fail(400, { missingLogin: true })
         }
 
         const { user, session } = await locals.validateUser()

@@ -13,7 +13,7 @@ model User {
   username  String      @unique @db.VarChar(255)
   telepon   String      @db.VarChar(255)
   level     Level       @default(MASYARAKAT)
-  nik       String?     @db.VarChar(255)
+  nik       String?     @unique @db.VarChar(255)
   Session   Session[]
   Key       Key[]
   Pengaduan Pengaduan[]

@@ -1,16 +1,19 @@
-<script>
-  // @ts-nocheck
+<script lang="ts">
+  import {
+    Card,
+    CardBody,
+    CardHeader,
+    CardFooter,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+    Button,
+    Col
+  } from "sveltestrap";
 
-  import Card from "sveltestrap/src/Card.svelte";
-  import CardBody from "sveltestrap/src/CardBody.svelte";
-  import CardHeader from "sveltestrap/src/CardHeader.svelte";
-  import CardFooter from "sveltestrap/src/CardFooter.svelte";
-  import Form from "sveltestrap/src/Form.svelte";
-  import FormGroup from "sveltestrap/src/FormGroup.svelte";
-  import Label from "sveltestrap/src/Label.svelte";
-  import Input from "sveltestrap/src/Input.svelte";
-  import Button from "sveltestrap/src/Button.svelte";
-  import Col from "sveltestrap/src/Col.svelte";
+  import type { ActionData } from "./$types";
+  export let form: ActionData;
 </script>
 
 <Col class="col-lg-7 mx-auto">
@@ -21,54 +24,70 @@
     <CardBody>
       <Form action="" method="POST">
         <FormGroup>
-          <Label for="inputName" class="small mb-1">Nama</Label>
+          <Label class="small mb-1">Nama</Label>
           <Input
             class="py-4"
             type="text"
             name="nama"
-            id="inputName"
             placeholder="Enter nama"
+            required
           />
         </FormGroup>
         <FormGroup>
-          <Label for="username" class="small mb-1">Username</Label>
+          <Label class="small mb-1">Username</Label>
           <Input
             class="py-4"
             type="text"
             name="username"
-            id="username"
             placeholder="Enter username"
+            value={form?.username}
+            required
           />
+          {#if form?.usernameReady}<p class="text-danger">*username sudah ada</p>{/if}
         </FormGroup>
         <FormGroup>
-          <Label for="inputPassword" class="small mb-1">Password</Label>
+          <Label class="small mb-1">Password</Label>
           <Input
             class="py-4"
             type="password"
             name="password"
-            id="inputPassword"
             placeholder="Enter password"
+            required
           />
+          {#if form?.incorrect}<p class="text-danger">*password tidak sesuai</p>{/if}
         </FormGroup>
         <FormGroup>
-          <Label for="telepon" class="small mb-1">Telepon</Label>
+          <Label class="small mb-1">Konfirmasi Password</Label>
+          <Input
+            class="py-4"
+            type="password"
+            name="Kpassword"
+            placeholder="Enter konfirmasi password"
+            required
+          />
+          {#if form?.incorrect}<p class="text-danger">*password tidak sesuai</p>{/if}
+        </FormGroup>
+        <FormGroup>
+          <Label class="small mb-1">Telepon</Label>
           <Input
             class="py-4"
             type="number"
             name="telepon"
-            id="telepon"
             placeholder="Enter telepon"
+            required
           />
         </FormGroup>
         <FormGroup>
-          <Label for="nik" class="small mb-1">Nik</Label>
+          <Label class="small mb-1">NIK</Label>
           <Input
             class="py-4"
             type="number"
             name="nik"
-            id="nik"
             placeholder="Enter nik"
+            required
+            value={form?.nik}
           />
+          {#if form?.nikReady}<p class="text-danger font-monospace">*NIK sudah digunakan sebelumnya</p>{/if}
         </FormGroup>
         <FormGroup class="mt-4 mb-0">
           <Button color="primary" type="submit" block>

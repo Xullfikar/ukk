@@ -10,7 +10,7 @@
     Button,
   } from "sveltestrap";
 
-  import { fade, fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
 
   let isOpen = false;
 
@@ -52,7 +52,7 @@
     || pengaduan.user.nama.toLowerCase().includes(search.toLowerCase())
     || pengaduan.tanggal.toLowerCase().includes(search.toLowerCase())
     }
-        <div class="card mb-3" in:fly="{{ y: 200, duration: 2000 }}" out:fade>
+        <div class="card mb-3" transition:fade="{{duration: 500}}">
             <div class="row g-0">
                 <div class="col-md-4">
                     <!-- svelte-ignore a11y-missing-attribute -->

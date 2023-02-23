@@ -1,15 +1,18 @@
-<script>
-// @ts-nocheck
+<script lang="ts">
+    import {
+      Card,
+      CardBody,
+      CardHeader,
+      CardFooter,
+      Form,
+      FormGroup,
+      Label,
+      Input,
+      Button
+    } from "sveltestrap";
 
-    import Card from "sveltestrap/src/Card.svelte";
-    import CardBody from "sveltestrap/src/CardBody.svelte";
-    import CardHeader from "sveltestrap/src/CardHeader.svelte";
-    import CardFooter from "sveltestrap/src/CardFooter.svelte";
-    import Form from "sveltestrap/src/Form.svelte";
-    import FormGroup from "sveltestrap/src/FormGroup.svelte";
-    import Label from "sveltestrap/src/Label.svelte";
-    import Input from "sveltestrap/src/Input.svelte";
-    import Button from "sveltestrap/src/Button.svelte";
+    import type { ActionData } from "./$types";
+    export let form: ActionData;
   </script>
   
   <div class="col-lg-5 mx-auto">
@@ -23,10 +26,14 @@
             <Label for="username" class="small mb-1">Username</Label>
             <Input
               class="py-4"
-              type="username"
+              type="text"
               name="username"
               id="username"
-              placeholder="Enter username address" />
+              placeholder="Enter username address" 
+              value={form?.username}
+              required
+              />
+              {#if form?.noUsername}<p class="text-danger font-monospace">*Username tidak ditemukan</p>{/if}
           </FormGroup>
           <FormGroup>
             <Label for="password" class="small mb-1">Password</Label>
@@ -35,7 +42,10 @@
               type="password"
               name="password"
               id="password"
-              placeholder="Enter password" />
+              placeholder="Enter password" 
+              required 
+              />
+              {#if form?.missingLogin}<p class="text-danger font-monospace">*Password salah</p>{/if}
           </FormGroup>
           <FormGroup
             class="d-flex align-items-center justify-content-center mt-4 mb-0">
@@ -48,4 +58,3 @@
       </CardFooter>
     </Card>
   </div>
-  
