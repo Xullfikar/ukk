@@ -3,12 +3,7 @@
     Button,
     Card,
     CardBody,
-    CardFooter,
     CardHeader,
-    CardSubtitle,
-    CardText,
-    CardTitle,
-    Col,
     Input,
     Row,
     Table,
@@ -25,7 +20,6 @@
   let searchStr = "";
   let open = false;
   let Idi: any;
-  let total: Array<string> = [];
 
   function id(id: BigInt) {
     open = !open;
@@ -71,7 +65,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <b>Data Pengaduan</b>
       <div style="width: 200px;">
-        <Input placeholder="Search" bind:value={searchStr} />
+        <Input class="form-control me-2" type="search" placeholder="Search" bind:value={searchStr} />
       </div>
     </div>
   </CardHeader>
