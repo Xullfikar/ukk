@@ -44,7 +44,7 @@
 
 <Card>
     <CardHeader class="bg-secondary">All Data</CardHeader>
-    <CardBody>
+    <CardBody class="table-responsive mx-2">
             <table class="table-bordered" bind:this={table}>
             <thead>
                 <tr>

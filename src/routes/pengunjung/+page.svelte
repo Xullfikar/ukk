@@ -42,9 +42,8 @@
       </Nav>
     </Collapse>
   </Navbar>
-  <div class="container">
 
-<div style="height: 90px;" />
+<div class="mt-3">
 {#each pengaduans as pengaduan}
     {#if pengaduan.status == "SELESAI" || pengaduan.status == "TOLAK"}
     {#if pengaduan.judul.toLowerCase().includes(search.toLowerCase()) 
